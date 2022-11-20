@@ -1,0 +1,6 @@
+flask
+pandas
+vertica_python
+matplotlib
+sqlalchemy
+sqlalchemy-vertica-python

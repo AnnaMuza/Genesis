@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Split Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="form-wrapper">
+        <form action="/">
+            <div class="select-wrapper">
+                <label for="split_id">Choose split:</label>
+                <select name="split_id" id="split_id">
+                    <option value="" selected disabled hidden>None</option>
+                    {% for split in splits%}
+                        <option value="{{ split['id'] }}" {{'selected' if split_id==split['id'] else ''}}>{{ split['name'] }}</option>
+                    {% endfor %}
+                </select>
+                <div>
+                    <label for="uplift">Expected uplift: </label>
+                    <input type="number" id="uplift" name="uplift"
+                    min="1" max="100" value="2">
+                    <label for="uplift">%</label>
+                </div>
+                 <div>
+                    <input type="radio" id="ninety-five"
+                     name="power" value="95">
+                    <label for="ninety-five">95%</label>
+
+                    <input type="radio" id="ninety"
+                     name="power" value="90">
+                    <label for="ninety">90%</label>
+
+                    <input type="radio" id="eighty"
+                     name="power" value="80" checked>
+                    <label for="eighty">80%</label>
+                 </div>
+            </div>
+            <input type="submit" value="Submit">
+
+        </form>
+    </div>
+    <div class="content-wrapper">
+
+        <div class="text-wrapper">
+            {% if min_sample_size is defined %}
+                <p>Minimal sample size is <b>{{ min_sample_size }}</b></p>
+            {% endif %}
+
+            {% if p_value is defined %}
+                <p>Difference in buyers% is <b>{{ 'significant' if p_value < 0.05 else 'not significant'}}</b></p>
+                <p>Currentp p-value is <b>{{ p_value }}</b></p>
+            {% endif %}
+        </div>
+
+        <div class="table-wrapper">
+            {% if table is defined %}
+                {{ table|safe }}
+            {% endif %}
+
+            {% if p_value_plot is defined %}
+                {{ p_value_plot|safe }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
